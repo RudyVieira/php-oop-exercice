@@ -6,10 +6,10 @@ function isLoggedIn(): bool {
 }
 
 function getDbConnexion(): PDO {
-    $host = 'php-oop-exercice-db';
+    $host = 'localhost';
     $db = 'blog';
     $user = 'root';
-    $password = 'password';
+    $password = '';
 
     $dsn = "mysql:host=$host;dbname=$db;charset=UTF8";
 

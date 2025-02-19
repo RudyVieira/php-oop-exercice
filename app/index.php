@@ -1,31 +1,36 @@
 <?php
 session_start();
 
-function getDbConnexion(): PDO {
-    $host = 'php-oop-exercice-db';
+function getDbConnexion(): PDO
+{
+    $host = 'localhost';
     $db = 'blog';
     $user = 'root';
-    $password = 'password';
+    $password = '';
 
     $dsn = "mysql:host=$host;dbname=$db;charset=UTF8";
 
     return new PDO($dsn, $user, $password);
 }
 
-function isLoggedIn(): bool {
+function isLoggedIn(): bool
+{
     return isset($_SESSION['user_id']);
 }
 
-function getPage(): int {
+function getPage(): int
+{
     return $_GET['page'] ?? 1;
 }
 
-function getLimit(): int {
+function getLimit(): int
+{
     return $_GET['limit'] ?? 10;
 }
 
 
-function getPostsCount(): int {
+function getPostsCount(): int
+{
     $sql = "SELECT COUNT(*) FROM posts";
     $stmt = getDbConnexion()->query($sql);
     $count = $stmt->fetchColumn();
@@ -33,7 +38,8 @@ function getPostsCount(): int {
     return $count;
 }
 
-function getPagination(): array {
+function getPagination(): array
+{
     $postsCount = getPostsCount();
     $postsPerPage = getLimit();
     $pagesCount = ceil($postsCount / $postsPerPage);
@@ -44,7 +50,8 @@ function getPagination(): array {
     ];
 }
 
-function getPosts(): array {
+function getPosts(): array
+{
 
     $currentPage = getPage();
     $postsPerPage = getLimit();
@@ -68,12 +75,14 @@ function getPosts(): array {
 
 <!doctype html>
 <html class="h-full">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body  class="min-h-full">
+
+<body class="min-h-full">
     <main class="min-h-full">
         <div class="flex flex-col min-h-full w-full items-center justify-start">
             <div class="flex flex-row w-full h-24 bg-gray-900 items-center justify-center">
@@ -84,8 +93,8 @@ function getPosts(): array {
                         <a href="/profile.php" class="text-white">Profile</a>
                         <a href="/logout.php" class="text-white">Logout</a>
                     <?php else: ?>
-                        <a href="/login.php"  class="text-white">Login</a>
-                        <a href="/register.php"  class="text-white">Register</a>
+                        <a href="/login.php" class="text-white">Login</a>
+                        <a href="/register.php" class="text-white">Register</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -93,7 +102,7 @@ function getPosts(): array {
                 <h1 class="text-4xl">Wonderful blog</h1>
 
                 <div class="flex flex-col w-full items-center justify-start space-y-4">
-                    <?php foreach(getPosts() as $post): ?>
+                    <?php foreach (getPosts() as $post): ?>
                         <div class="flex flex-col w-full items-center justify-start border border-gray-300 p-4">
                             <a href="/blogs/index.php?id=<?= $post['id'] ?>" class="text-2xl"><?= $post['title'] ?></a>
                             <a href="/users.php?id=<?= $post['user_id'] ?>" class="p">By <?= $post['name'] ?></a>
@@ -103,15 +112,17 @@ function getPosts(): array {
 
                 <div class="flex flex-row w-full items-center justify-center space-x-4">
                     <?php for ($i = 1; $i <= getPagination()['pagesCount']; $i++): ?>
-                        <?php if($i !== getPage()): ?>
+                        <?php if ($i !== getPage()): ?>
                             <a href="/?page=<?= $i ?>" class="text-xl underline text-gray"><?= $i ?></a>
                         <?php else: ?>
                             <p class="text-2xl font-bold text-black"><?= $i ?></p>
-                        <? endif; ?>
+                        <?php endif; ?>
                     <?php endfor; ?>
                 </div>
             </div>
-        </div>        
+        </div>
+        </div>
     </main>
 </body>
+
 </html>
